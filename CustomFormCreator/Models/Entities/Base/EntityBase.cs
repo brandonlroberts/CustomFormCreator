@@ -23,6 +23,8 @@ namespace CustomFormCreator.Models.Entities.Base
         public string ModifiedBy { get; set; }
         [DisplayName("Date Modified ")]
         public DateTime Modified { get; set; }
+        [DisplayName("Is Active")]
+        public bool IsActive { get; set; }
 
     }
 }

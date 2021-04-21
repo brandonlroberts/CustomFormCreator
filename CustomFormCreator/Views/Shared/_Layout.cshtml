@@ -6,6 +6,7 @@
     <title>@ViewData["Title"] - CustomFormCreator</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css">
 </head>
 <body>
     <header>
@@ -22,7 +23,16 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Forms" asp-action="Index">Forms</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Sections" asp-action="Index">Sections</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Columns" asp-action="Index">Columns</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="FormColumnTypes" asp-action="Index">Column Types</a>
                         </li>
                     </ul>
                     <partial name="_LoginPartial" />

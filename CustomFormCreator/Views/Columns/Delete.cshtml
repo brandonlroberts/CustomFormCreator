@@ -1,4 +1,4 @@
-﻿@model CustomFormCreator.Models.Entities.Column
+﻿@model CustomFormCreator.Models.Entities.FormColumn
 
 @{
     ViewData["Title"] = "Delete";
@@ -30,10 +30,10 @@
             @Html.DisplayFor(model => model.Order)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ColumnType)
+            @Html.DisplayNameFor(model => model.FormColumnTypeId)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ColumnType)
+            @Html.DisplayFor(model => model.FormColumnTypeId)
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Rowversion)

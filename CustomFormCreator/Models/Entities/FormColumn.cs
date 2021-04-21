@@ -3,14 +3,19 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CustomFormCreator.Models.Entities
 {
-    public class Column : EntityBase
+    public class FormColumn : EntityBase
     {
         public int? SectionId { get; set; }
         [ForeignKey(nameof(SectionId))]
-        public Section SectionNavigation { get; set; }
+        public FormSection SectionNavigation { get; set; }
 
         public string Name { get; set; }
         public int? Order { get; set; }
-        public string ColumnType { get; set; }
+
+        public int? FormColumnTypeId { get; set; }
+        [ForeignKey(nameof(FormColumnTypeId))]
+        public FormColumnType FormColumnTypeNavigation { get; set; }
+
+        public string Data { get; set; }
     }
 }

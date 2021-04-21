@@ -3,6 +3,7 @@ using CustomFormCreator.Models.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -20,7 +21,7 @@ namespace CustomFormCreator.Controllers
         // GET: Sections
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Sections.Include(s => s.FormNavigation);
+            var applicationDbContext = _context.FormSections.Include(s => s.FormNavigation);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -32,7 +33,7 @@ namespace CustomFormCreator.Controllers
                 return NotFound();
             }
 
-            var section = await _context.Sections
+            var section = await _context.FormSections
                 .Include(s => s.FormNavigation)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (section == null)
@@ -46,7 +47,7 @@ namespace CustomFormCreator.Controllers
         // GET: Sections/Create
         public IActionResult Create()
         {
-            ViewData["FormId"] = new SelectList(_context.Forms, "Id", "Id");
+            ViewData["FormId"] = new SelectList(_context.Forms, "Id", "Name");
             return View();
         }
 
@@ -55,15 +56,20 @@ namespace CustomFormCreator.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("FormId,Name,Order,Id,Rowversion,CreatedBy,Created,ModifiedBy,Modified")] Section section)
+        public async Task<IActionResult> Create([FromForm] FormSection section)
         {
             if (ModelState.IsValid)
             {
+                section.Created = DateTime.Now;
+                section.Modified = DateTime.Now;
+                section.ModifiedBy = "Brandon Roberts";
+                section.CreatedBy = "Brandon Roberts";
+                section.IsActive = true;
                 _context.Add(section);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["FormId"] = new SelectList(_context.Forms, "Id", "Id", section.FormId);
+            ViewData["FormId"] = new SelectList(_context.Forms, "Id", "Name", section.FormId);
             return View(section);
         }
 
@@ -75,12 +81,12 @@ namespace CustomFormCreator.Controllers
                 return NotFound();
             }
 
-            var section = await _context.Sections.FindAsync(id);
+            var section = await _context.FormSections.FindAsync(id);
             if (section == null)
             {
                 return NotFound();
             }
-            ViewData["FormId"] = new SelectList(_context.Forms, "Id", "Id", section.FormId);
+            ViewData["FormId"] = new SelectList(_context.Forms, "Id", "Name", section.FormId);
             return View(section);
         }
 
@@ -89,7 +95,7 @@ namespace CustomFormCreator.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("FormId,Name,Order,Id,Rowversion,CreatedBy,Created,ModifiedBy,Modified")] Section section)
+        public async Task<IActionResult> Edit(int id, [FromForm] FormSection section)
         {
             if (id != section.Id)
             {
@@ -116,7 +122,7 @@ namespace CustomFormCreator.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["FormId"] = new SelectList(_context.Forms, "Id", "Id", section.FormId);
+            ViewData["FormId"] = new SelectList(_context.Forms, "Id", "Name", section.FormId);
             return View(section);
         }
 
@@ -128,7 +134,7 @@ namespace CustomFormCreator.Controllers
                 return NotFound();
             }
 
-            var section = await _context.Sections
+            var section = await _context.FormSections
                 .Include(s => s.FormNavigation)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (section == null)
@@ -144,15 +150,15 @@ namespace CustomFormCreator.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var section = await _context.Sections.FindAsync(id);
-            _context.Sections.Remove(section);
+            var section = await _context.FormSections.FindAsync(id);
+            _context.FormSections.Remove(section);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool SectionExists(int id)
         {
-            return _context.Sections.Any(e => e.Id == id);
+            return _context.FormSections.Any(e => e.Id == id);
         }
     }
 }

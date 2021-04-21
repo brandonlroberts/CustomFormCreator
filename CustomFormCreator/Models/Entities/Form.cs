@@ -8,7 +8,7 @@ namespace CustomFormCreator.Models.Entities
     {
         public string Name { get; set; }
 
-        [InverseProperty(nameof(Section.FormNavigation))]
-        public IEnumerable<Section> Sections { get; set; } = new List<Section>();
+        [InverseProperty(nameof(FormSection.FormNavigation))]
+        public List<FormSection> FormSections { get; set; } = new List<FormSection>();
     }
 }

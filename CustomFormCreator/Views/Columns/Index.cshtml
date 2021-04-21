@@ -1,4 +1,4 @@
-﻿@model IEnumerable<CustomFormCreator.Models.Entities.Column>
+﻿@model IEnumerable<CustomFormCreator.Models.Entities.FormColumn>
 
 @{
     ViewData["Title"] = "Index";
@@ -22,7 +22,7 @@
                 @Html.DisplayNameFor(model => model.Order)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ColumnType)
+                @Html.DisplayNameFor(model => model.FormColumnTypeNavigation.Name)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Rowversion)
@@ -46,7 +46,7 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.SectionNavigation.Id)
+                @Html.DisplayFor(modelItem => item.SectionNavigation.Name)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Name)
@@ -55,7 +55,7 @@
                 @Html.DisplayFor(modelItem => item.Order)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.ColumnType)
+                @Html.DisplayFor(modelItem => item.FormColumnTypeNavigation.Name)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Rowversion)

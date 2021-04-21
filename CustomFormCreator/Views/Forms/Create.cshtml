@@ -1,53 +1,89 @@
 ﻿@model CustomFormCreator.Models.Entities.Form
-
 @{
     ViewData["Title"] = "Create";
 }
 
-<h1>Create</h1>
-
-<h4>Form</h4>
 <hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
+<div class="row justify-content-md-center">
+    <div class="col-8">
+        <form asp-action="Create" class="needs-validation" novalidate>
+            <div class="container-fluid" style="padding: 10px; margin: 10px; width: 100%">
+                <div class="form-group">
+                    <label class="control-label">Form Name</label>
+                    <input type="text" required asp-for="@Model.Name" class="form-control" />
+                    <div class="invalid-feedback"> Please choose a form name. </div>
+                    <div class="valid-feedback"> Looks good! </div>
+                </div>
+            </div>
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CreatedBy" class="control-label"></label>
-                <input asp-for="CreatedBy" class="form-control" />
-                <span asp-validation-for="CreatedBy" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Created" class="control-label"></label>
-                <input asp-for="Created" class="form-control" />
-                <span asp-validation-for="Created" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ModifiedBy" class="control-label"></label>
-                <input asp-for="ModifiedBy" class="form-control" />
-                <span asp-validation-for="ModifiedBy" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Modified" class="control-label"></label>
-                <input asp-for="Modified" class="form-control" />
-                <span asp-validation-for="Modified" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+            @for (int i = 0; i < Model.FormSections.Count(); i++)
+            {
+                <div class="container-fluid" style="border-style: solid; border-color: gray; border-radius: 5px; padding: 10px; margin: 10px; width: 100%">
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">
+                                <input type="checkbox" asp-for="@Model.FormSections[i].IsActive" aria-label="Checkbox for following text input">
+                                <input type="hidden" asp-for="@Model.FormSections[i].Name" />
+                            </div>
+                        </div>
+                        <input style="width: 80%" disabled value="@Model.FormSections[i].Name" type="text" readonly class="form-control" aria-label="Text input with checkbox">
+                        <input asp-for="@Model.FormSections[i].Order" type="number" class="form-control">
+                    </div>
+                    <div style="padding: 20px">
+                        @for (int j = 0; j < Model.FormSections[i].FormColumns.Count(); j++)
+                        {
+                            <div class="form-group">
+
+                                <div class="container-fluid row">
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">
+                                                <input type="checkbox" asp-for="@Model.FormSections[i].FormColumns[j].IsActive" aria-label="Checkbox for following text input">
+                                                <input type="hidden" asp-for="@Model.FormSections[i].FormColumns[j].Name" />
+                                                <input type="hidden" asp-for="@Model.FormSections[i].FormColumns[j].FormColumnTypeId" />
+                                            </div>
+                                        </div>
+                                        <input style="width: 80%" disabled value="@Model.FormSections[i].FormColumns[j].Name" type="text" readonly class="form-control" aria-label="Text input with checkbox">
+                                        <input asp-for="@Model.FormSections[i].FormColumns[j].Order" type="number" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+            <div class="container-fluid" style="padding: 10px; margin: 10px; width: 100%">
+                <div class="form-group">
+                    <input type="submit" value="Save" class="btn btn-primary" />
+                    <a asp-action="Index">Back to List</a>
+                </div>
             </div>
         </form>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script>
+        // Example starter JavaScript for disabling form submissions if there are invalid fields
+        (function () {
+            'use strict';
+            window.addEventListener('load', function () {
+                // Fetch all the forms we want to apply custom Bootstrap validation styles to
+                var forms = document.getElementsByClassName('needs-validation');
+                // Loop over them and prevent submission
+                var validation = Array.prototype.filter.call(forms, function (form) {
+                    form.addEventListener('submit', function (event) {
+                        if (form.checkValidity() === false) {
+                            event.preventDefault();
+                            event.stopPropagation();
+                        }
+                        form.classList.add('was-validated');
+                    }, false);
+                });
+            }, false);
+        })();
+    </script>
 }

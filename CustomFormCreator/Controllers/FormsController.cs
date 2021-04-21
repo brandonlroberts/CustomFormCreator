@@ -19,22 +19,19 @@ namespace CustomFormCreator.Controllers
         // GET: Forms
         public async Task<IActionResult> Index()
         {
-
-            var foo = await _context.Forms.Include(x => x.Sections).ThenInclude(y => y.Columns).ToListAsync();
-
             return View(await _context.Forms.ToListAsync());
         }
 
         // GET: Forms/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public IActionResult Details(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var form = await _context.Forms
-                .FirstOrDefaultAsync(m => m.Id == id);
+            Form form = GetFormAndSetOrder(id);
+
             if (form == null)
             {
                 return NotFound();
@@ -46,7 +43,20 @@ namespace CustomFormCreator.Controllers
         // GET: Forms/Create
         public IActionResult Create()
         {
-            return View();
+            var form = new Form()
+            {
+                FormSections = _context.FormSections
+                    .Where(c => c.FormId == 1)
+                        .Select(c => new FormSection
+                        {
+                            Order = c.Order,
+                            Name = c.Name,
+                            IsActive = c.IsActive,
+                            FormColumns = _context.FormColumns.Include(x => x.FormColumnTypeNavigation).Where(gc => gc.SectionId == c.Id).OrderBy(gc => gc.Order).ToList()
+                        }).OrderBy(c => c.Order).ToList(),
+            };
+
+            return View(form);
         }
 
         // POST: Forms/Create
@@ -54,10 +64,20 @@ namespace CustomFormCreator.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Name,Id,Rowversion,CreatedBy,Created,ModifiedBy,Modified")] Form form)
+        public async Task<IActionResult> Create([FromForm] Form form)
         {
             if (ModelState.IsValid)
             {
+                foreach (var secton in form.FormSections)
+                {
+                    secton.Id = 0;
+                    secton.Rowversion = null;
+                    foreach (var column in secton.FormColumns)
+                    {
+                        column.Id = 0;
+                        column.Rowversion = null;
+                    }
+                }
                 _context.Add(form);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -66,19 +86,20 @@ namespace CustomFormCreator.Controllers
         }
 
         // GET: Forms/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public IActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var form = await _context.Forms.FindAsync(id);
-            if (form == null)
+            Form model = GetFormAndSetOrder(id);
+
+            if (model == null)
             {
                 return NotFound();
             }
-            return View(form);
+            return View(model);
         }
 
         // POST: Forms/Edit/5
@@ -86,7 +107,7 @@ namespace CustomFormCreator.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Name,Id,Rowversion,CreatedBy,Created,ModifiedBy,Modified")] Form form)
+        public async Task<IActionResult> Edit(int id, [FromForm] Form form)
         {
             if (id != form.Id)
             {
@@ -148,6 +169,39 @@ namespace CustomFormCreator.Controllers
         private bool FormExists(int id)
         {
             return _context.Forms.Any(e => e.Id == id);
+        }
+
+        private Form GetFormAndSetOrder(int? id)
+        {
+            return _context.Forms
+                .Where(x => x.Id == id)
+                .Select(x => new Form
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    Created = x.Created,
+                    CreatedBy = x.CreatedBy,
+                    Modified = x.Modified,
+                    ModifiedBy = x.ModifiedBy,
+                    IsActive = x.IsActive,
+                    Rowversion = x.Rowversion,
+                    FormSections = _context.FormSections
+                    .Where(c => c.FormId == x.Id)
+                        .Select(c => new FormSection
+                        {
+                            Id = c.Id,
+                            Order = c.Order,
+                            FormId = c.FormId,
+                            Name = c.Name,
+                            Created = c.Created,
+                            CreatedBy = c.CreatedBy,
+                            Modified = c.Modified,
+                            ModifiedBy = c.ModifiedBy,
+                            IsActive = c.IsActive,
+                            Rowversion = c.Rowversion,
+                            FormColumns = _context.FormColumns.Include(x => x.FormColumnTypeNavigation).Where(gc => gc.SectionId == c.Id).OrderBy(gc => gc.Order).ToList()
+                        }).OrderBy(c => c.Order).ToList()
+                }).FirstOrDefault();
         }
     }
 }

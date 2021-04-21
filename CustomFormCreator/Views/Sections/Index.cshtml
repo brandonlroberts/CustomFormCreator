@@ -1,4 +1,4 @@
-﻿@model IEnumerable<CustomFormCreator.Models.Entities.Section>
+﻿@model IEnumerable<CustomFormCreator.Models.Entities.FormSection>
 
 @{
     ViewData["Title"] = "Index";
@@ -21,21 +21,6 @@
             <th>
                 @Html.DisplayNameFor(model => model.Order)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Rowversion)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CreatedBy)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Created)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ModifiedBy)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Modified)
-            </th>
             <th></th>
         </tr>
     </thead>
@@ -43,28 +28,13 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.FormNavigation.Id)
+                @Html.DisplayFor(modelItem => item.FormNavigation.Name)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Name)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Order)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Rowversion)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CreatedBy)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Created)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ModifiedBy)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Modified)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |

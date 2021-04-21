@@ -1,4 +1,4 @@
-﻿@model CustomFormCreator.Models.Entities.Column
+﻿@model CustomFormCreator.Models.Entities.FormColumn
 
 @{
     ViewData["Title"] = "Edit";
@@ -28,31 +28,13 @@
                 <span asp-validation-for="Order" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="ColumnType" class="control-label"></label>
-                <input asp-for="ColumnType" class="form-control" />
-                <span asp-validation-for="ColumnType" class="text-danger"></span>
+                <label asp-for="FormColumnTypeId" class="control-label"></label>
+                <select asp-for="FormColumnTypeId" class="form-control" asp-items="ViewBag.FormColumnTypeId"></select>
+                <span asp-validation-for="FormColumnTypeId" class="text-danger"></span>
             </div>
             <input type="hidden" asp-for="Id" />
-            <div class="form-group">
-                <label asp-for="CreatedBy" class="control-label"></label>
-                <input asp-for="CreatedBy" class="form-control" />
-                <span asp-validation-for="CreatedBy" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Created" class="control-label"></label>
-                <input asp-for="Created" class="form-control" />
-                <span asp-validation-for="Created" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ModifiedBy" class="control-label"></label>
-                <input asp-for="ModifiedBy" class="form-control" />
-                <span asp-validation-for="ModifiedBy" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Modified" class="control-label"></label>
-                <input asp-for="Modified" class="form-control" />
-                <span asp-validation-for="Modified" class="text-danger"></span>
-            </div>
+            <input type="hidden" asp-for="Rowversion" />
+            <input type="hidden" asp-for="IsActive" />
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
