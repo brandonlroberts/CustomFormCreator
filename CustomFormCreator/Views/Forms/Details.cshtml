@@ -28,7 +28,14 @@
                                     {
                                         <label class="control-label">@formColumn.Name</label>
                                         <div class="container-fluid row">
-                                            <div class="col"><input type="@formColumn.FormColumnTypeNavigation.Type" asp-for="@formColumn.Data" class="form-control" /></div>
+                                            @if (formColumn.FormColumnTypeNavigation.Type == "tel")
+                                            {
+                                                <div class="col"><input type="@formColumn.FormColumnTypeNavigation.Type" asp-for="@formColumn.Data" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" placeholder="xxx-xxx-xxxx" class="form-control" /></div>
+                                            }
+                                            else
+                                            {
+                                                <div class="col"><input type="@formColumn.FormColumnTypeNavigation.Type" asp-for="@formColumn.Data" class="form-control" /></div>
+                                            }
                                         </div>
                                     }
                                 </div>
@@ -37,6 +44,12 @@
                     </div>
                 }
             }
+            <div class="container-fluid" style="padding: 10px; margin: 10px; width: 100%">
+                <div class="form-group">
+                    <input type="submit" value="Save" class="btn btn-primary" />
+                    <a asp-action="Index">Back to List</a>
+                </div>
+            </div>
             <div class="container-fluid" style="padding: 10px; margin: 10px; width: 100%">
                 <div class="form-group">
                     <a asp-action="Index">Back to List</a>

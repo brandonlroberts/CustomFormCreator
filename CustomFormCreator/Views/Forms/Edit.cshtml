@@ -48,6 +48,10 @@
                                                 <input type="hidden" asp-for="@Model.FormSections[i].FormColumns[j].Rowversion" />
                                             </div>
                                         </div>
+                                        @if (Model.FormSections[i].FormColumns[j].FormColumnTypeNavigation.Name == "tel")
+                                        {
+
+                                        }
                                         <input style="width: 80%" disabled value="@Model.FormSections[i].FormColumns[j].Name" type="text" readonly class="form-control" aria-label="Text input with checkbox">
                                         <input asp-for="@Model.FormSections[i].FormColumns[j].Order" type="number" class="form-control">
                                     </div>
